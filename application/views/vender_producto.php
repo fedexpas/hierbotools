@@ -27,16 +27,16 @@
         
         <!---------------Inicio session nombre de usuario-------------------------->
         
-        <label>Usuario:</label>
-        <?php if ($this->session->userdata('usuario')) { ?>
-        <p id='usuario' ><b><?php echo $this->session->userdata('usuario'); ?></b></p>
+        <label>Cliente:</label>
+        <?php if ($this->session->userdata('cliente')) { ?>
+        <p id='usuario' ><b><?php echo $this->session->userdata('cliente'); ?></b></p>
         <label>E-Mail:</label>
-        <p><b><?php echo $this->session->userdata('usuario_email'); ?></b></p>
+        <p><b><?php echo $this->session->userdata('cliente_email'); ?></b></p>
         ><p id='usuario_del' style='color: red;'>Cambiar</p>
         <?php } else { ?>
-            <input type="text" name="usuario" value=""><br />
+            <input type="text" name="cliente" value=""><br />
             <label>E-Mail:</label>
-            <input type="text" name="usuario_email" value="">
+            <input type="text" name="cliente_email" value="">
         <?php } ?>
             
         <!-----------------Fin session nombre de usuario--------------------------->    

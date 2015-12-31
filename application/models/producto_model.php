@@ -38,10 +38,6 @@ class Producto_model extends CI_Model {
                 $this->db->select('*');
                 $query = $this->db->get('tipo');
             }
-            else if ($id == 'usuario_temp') {
-                $this->db->select('*');
-                $query = $this->db->get('usuario_temp');
-            }
             else {
                 $this->db->select('p.*, m.nombre as marca, t.nombre as tipo');
                 $this->db->join('marca m', 'm.marca_id=p.marca_id', 'left');

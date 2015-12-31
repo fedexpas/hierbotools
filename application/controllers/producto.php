@@ -192,9 +192,13 @@ class Producto extends CI_Controller {
         public function venta_ok()
         {
             global $data;
-            if ($_POST['usuario'] && $_POST['usuario_email']) {
-                $this->session->set_userdata(array('usuario'=>$_POST['usuario'])); // Establece el nombre de usuario para esta sesion
-                $this->session->set_userdata(array('usuario_email'=>$_POST['usuario_email'])); // Guarda el email del usuario para esta sesion
+            if ($_POST['cliente'] OR $_POST['cliente'] && $_POST['cliente_email']) {
+                $this->session->set_userdata(array('cliente'=>$_POST['cliente'])); // Establece el nombre de usuario para esta sesion
+                $this->session->set_userdata(array('cliente_email'=>$_POST['cliente_email'])); // Guarda el email del cliente para esta sesion
+                
+                //if (!($cliente_id = $this->cliente_model->getClienteByEmail($_POST['cliente_email']))) // Si el email no se encuentra en la tabla 'cliente'
+                // $cliente_id = $this->cliente_model->addCliente // Se agrega al nuevo cliente
+                
             }
             
             // $_POST['descuento'] = 0 // En la vista vender_ok se verifica si el descuento es igual a 0 (cero), asignarlo aqui es una precaución por si el usario dejó el campo vacío            
