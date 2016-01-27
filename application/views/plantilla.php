@@ -31,8 +31,9 @@
             <li <?php echo ($activo=='productos')?'class="active"':''; ?>><a href="http://localhost:8888/hierbotools/index.php/producto">Productos</a></li>
             <li <?php echo ($activo=='ventas')?'class="active"':''; ?>><a href="http://localhost:8888/hierbotools/index.php/inicio/ventas">Ventas</a></li>
             <li <?php echo ($activo=='pedidos')?'class="active"':''; ?>><a href="http://localhost:8888/hierbotools/index.php/pedidos">Pedidos</a></li>
-            <?php if ($this->session->userdata('usuario')) { ?> <!----- Si la sesion esta trabajando con un usuario ------->
-                <li <?php echo ($activo=='usuario')?'class="active"':''; ?>><a href="http://localhost:8888/hierbotools/index.php/usuario/carrito">Carrito de <?php echo $this->session->userdata('usuario'); ?></a></li> <!--- Imprime su nombre de usuario con el link para ir a su carrito de compras ---->
+            <li <?php echo ($activo=='cliente')?'class="active"':''; ?>><a href="http://localhost:8888/hierbotools/index.php/cliente">Clientes</a></li>
+            <?php if ($this->session->userdata('cliente')) { ?> <!----- Si la sesion esta trabajando con un cliente (se inicia en producto/venta_ok) ------->
+                <li <?php echo ($activo=='carrito')?'class="active"':''; ?>><a href="http://localhost:8888/hierbotools/index.php/cliente/carrito">Carrito de <?php echo $this->session->userdata('cliente'); ?></a></li> <!--- Imprime el nombre del cliente con el link para ir a su carrito de compras ---->
             <?php } ?>
           </ul>
         </div><!--/.nav-collapse -->

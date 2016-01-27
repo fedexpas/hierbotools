@@ -26,6 +26,8 @@ class Producto extends CI_Controller {
                 date_default_timezone_set('America/Mexico_City');
 
                 $this->load->model('producto_model');
+                $this->load->model('cliente_model');
+                $this->load->model('compra_model');
                 $this->load->helper('date');
 
                 global $data;
@@ -192,12 +194,21 @@ class Producto extends CI_Controller {
         public function venta_ok()
         {
             global $data;
+            
             if ($_POST['cliente'] OR $_POST['cliente'] && $_POST['cliente_email']) {
                 $this->session->set_userdata(array('cliente'=>$_POST['cliente'])); // Establece el nombre de usuario para esta sesion
                 $this->session->set_userdata(array('cliente_email'=>$_POST['cliente_email'])); // Guarda el email del cliente para esta sesion
                 
                 //if (!($cliente_id = $this->cliente_model->getClienteByEmail($_POST['cliente_email']))) // Si el email no se encuentra en la tabla 'cliente'
                 // $cliente_id = $this->cliente_model->addCliente // Se agrega al nuevo cliente
+                
+                if (!$this->cliente_model->existe(array('email'=>$this->session->userdata('cliente_email')))) { // si el correo de la sesion no existe en la db de clientes
+                    
+                    $datos_cliente = array('nombre'=>$this->session->userdata('cliente'),
+                                            'email'=>$this->session->userdata('cliente_email'));
+                    
+                    $this->cliente_model->agregar($datos_cliente); // agrega al cliente a la db (su nombre o apodo y su correo 
+                }
                 
             }
             
@@ -211,6 +222,8 @@ class Producto extends CI_Controller {
                                         'marca'=>$_POST['marca'],
                                         'producto_id'=>$_POST['producto_id']);
             
+            //@TODO: Guardar en DB temporal de carrito de compras (compra_model)
+            
             // echo "<pre>";print_r($data['datos_venta']);exit; ('cantidad' aparecia diferente a la original porque se modifica en vista_ok RESUELTO guardando la cantidad original antes de modificar la variable 07/11/15
             
             $data['vista'] = 'venta_ok';
@@ -218,7 +231,7 @@ class Producto extends CI_Controller {
             $this->load->view('plantilla', $data);
         }
         
-        public function do_vender()
+        public function do_vender() // Checkout del carrito. Cobrar todo lo que esta en carrito (viene desde venta_ok)
         {
             global $data;
             

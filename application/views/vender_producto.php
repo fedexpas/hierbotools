@@ -29,14 +29,28 @@
         
         <label>Cliente:</label>
         <?php if ($this->session->userdata('cliente')) { ?>
+        
         <p id='usuario' ><b><?php echo $this->session->userdata('cliente'); ?></b></p>
-        <label>E-Mail:</label>
-        <p><b><?php echo $this->session->userdata('cliente_email'); ?></b></p>
-        ><p id='usuario_del' style='color: red;'>Cambiar</p>
+        <input type="hidden" name="cliente" value="<?php echo $this->session->userdata('cliente'); ?>">
+        
         <?php } else { ?>
-            <input type="text" name="cliente" value=""><br />
-            <label>E-Mail:</label>
+        
+        <input type="text" name="cliente" value=""><br />
+        
+        <?php } ?>
+        
+        <label>E-Mail:</label>
+        <?php if ($this->session->userdata('cliente_email')) { ?>
+        
+        <p><b><?php echo $this->session->userdata('cliente_email'); ?></b></p>
+        <input type="hidden" name="cliente_email" value="<?php echo $this->session->userdata('cliente_email'); ?>">
+        
+        <p id='usuario_del' style='color: red;'>Cambiar</p>
+        
+        <?php } else { ?>
+        
             <input type="text" name="cliente_email" value="">
+            
         <?php } ?>
             
         <!-----------------Fin session nombre de usuario--------------------------->    
@@ -45,7 +59,7 @@
         <input type="hidden" name="producto_id" value="<?php echo $producto[0]->producto_id; ?>">
     </fieldset>
 <br />
-<input type="submit" class="btn btn-success" value="Ver la cuenta" />
+<input type="submit" class="btn btn-success" value="Agregar al carrito" />
 <?php echo form_close(); ?>
 <?php } else { ?> 
 <p>No hay stock disponible de este producto</p>
