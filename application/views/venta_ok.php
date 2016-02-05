@@ -39,9 +39,16 @@
       <?php if ($datos_venta['descuento'] != 0) echo "<td></td>"; ?>
   </tr>
 </table>
-<input type="hidden" name="precio" value="<?php echo $datos_venta['precio']; ?>">
-<input type="hidden" name="cantidad_vendida" value="<?php echo $cantidad; ?>">
-<input type="hidden" name="descuento" value="<?php echo $datos_venta['descuento']; ?>">
-<input type="hidden" name="producto_id" value="<?php echo $datos_venta['producto_id']; ?>">
-<input type="submit" class="btn btn-success" style="float: right;" value="Vender" />
+<div style="float: right;">
+    
+    <label>Fecha límite de entrega</label>
+    <p>ej.: 04/20/2017 (solo aplica si es un pedido)</p>
+    <input type="date" name="fecha_entrega" />
+    
+    <input type="hidden" name="precio" value="<?php echo $datos_venta['precio']; ?>">
+    <input type="hidden" name="cantidad_vendida" value="<?php echo $cantidad; ?>">
+    <input type="hidden" name="descuento" value="<?php echo $datos_venta['descuento']; ?>">
+    <input type="hidden" name="producto_id" value="<?php echo $datos_venta['producto_id']; ?>">
+    <br /><br /><input type="submit" class="btn btn-success" value="Vender" />
+</div>
 <?php echo form_close(); ?>

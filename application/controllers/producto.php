@@ -195,22 +195,24 @@ class Producto extends CI_Controller {
         {
             global $data;
             
-            if ($_POST['cliente'] OR $_POST['cliente'] && $_POST['cliente_email']) {
+            /******************* AGREGA CLIENTE A LA DB ***************************/
+            
+            if ($_POST['cliente'] && $_POST['cliente_email']) {
                 $this->session->set_userdata(array('cliente'=>$_POST['cliente'])); // Establece el nombre de usuario para esta sesion
                 $this->session->set_userdata(array('cliente_email'=>$_POST['cliente_email'])); // Guarda el email del cliente para esta sesion
                 
-                //if (!($cliente_id = $this->cliente_model->getClienteByEmail($_POST['cliente_email']))) // Si el email no se encuentra en la tabla 'cliente'
-                // $cliente_id = $this->cliente_model->addCliente // Se agrega al nuevo cliente
                 
                 if (!$this->cliente_model->existe(array('email'=>$this->session->userdata('cliente_email')))) { // si el correo de la sesion no existe en la db de clientes
                     
                     $datos_cliente = array('nombre'=>$this->session->userdata('cliente'),
                                             'email'=>$this->session->userdata('cliente_email'));
                     
-                    $this->cliente_model->agregar($datos_cliente); // agrega al cliente a la db (su nombre o apodo y su correo 
+                    $cliente_id = $this->cliente_model->agregar($datos_cliente); // agrega al cliente a la db (su nombre o apodo y su correo)
+                    $this->session->set_userdata(array('cliente_id'=>$cliente_id));
                 }
-                
             }
+            
+            /*********************************************************************/
             
             // $_POST['descuento'] = 0 // En la vista vender_ok se verifica si el descuento es igual a 0 (cero), asignarlo aqui es una precaución por si el usario dejó el campo vacío            
             
@@ -222,7 +224,39 @@ class Producto extends CI_Controller {
                                         'marca'=>$_POST['marca'],
                                         'producto_id'=>$_POST['producto_id']);
             
+            $datos_temp = $data['datos_venta']; // Copia los datos a una nueva variable para modificarlos ligeramente
+            
+            if (isset($cliente_id)) { // Si la variable $cliente_id fue asignada (porque el usuario ingreso un nombre de cliente)
+                $datos_temp['cliente_id'] = $cliente_id; // se copia a la tabla cliente_compra_Temp
+            }
+            
+            /****************************/
+            //Corregimos nombres de variables para que esten de acuerdo con las de la db
+            
+            $datos_temp['marca_id'] = $datos_temp['marca']; // Copia variable a la que tiene el nombre que queremos (en este caso marca_id por que asi esta en la db)
+            unset($datos_temp['marca']); // Borra vieja variable con nombre no deseado (IMPORTANTE: si esto no se hace se produce un ERROR porque intenta insertar un campo en la db con el nombre de la variabla y este no existe)
+            
+            $datos_temp['tipo_id'] = $datos_temp['tipo'];
+            unset($datos_temp['tipo']);
+            
+            /****************************/
+            
             //@TODO: Guardar en DB temporal de carrito de compras (compra_model)
+            
+            /************* AGREGA COMPRAS A LA DB TEMPORAL ************/
+            
+            if ($this->session->userdata('compra_temp_ids') !== NULL) { // Si la variable de sesion compra_temp_ids existe procedemos a agregar un nuevo ID
+                $compra_temp_id = $this->compra_model->agregarCarrito($datos_temp);
+                $viejos_ids = $this->session->userdata('compra_temp_ids');
+                $viejos_ids .= $compra_temp_id;  // REVISAR: Esto agrega la variable al array?
+                $this->session->set_userdata(array('compra_Temp_ids'=>$viejos_ids));
+            }
+            else { // De lo contrario creamos la variable y le asignamos su primer valor
+                $compra_temp_id = $this->compra_model->agregarCarrito($datos_temp);
+                $this->session->set_userdata(array('compra_Temp_ids'=>$compra_temp_id));
+            }
+                
+            /***********************************************************/
             
             // echo "<pre>";print_r($data['datos_venta']);exit; ('cantidad' aparecia diferente a la original porque se modifica en vista_ok RESUELTO guardando la cantidad original antes de modificar la variable 07/11/15
             
@@ -234,6 +268,10 @@ class Producto extends CI_Controller {
         public function do_vender() // Checkout del carrito. Cobrar todo lo que esta en carrito (viene desde venta_ok)
         {
             global $data;
+            
+            if (!empty($_POST['fecha_entrega'])) { // Si la fecha limite para entregar el pedido NO esta vacia entonces esto ES UN PEDIDO
+                // @TODO
+            }
             
             if ($_POST['producto_id']) { // $_POST['producto_id'] es el ID del producto y debe ser obtenido porque esta en un input oculto (hidden)
                 $producto_id = $_POST['producto_id'];

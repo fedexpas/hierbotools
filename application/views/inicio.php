@@ -49,39 +49,44 @@
         <?php echo anchor('inicio/ventas', 'Ver ventas anteriores', array('style'=>'float: right', 'class'=>'btn btn-default btn-small show-option', 'title'=>'Ver ventas anteriores')); ?>
     </div>
     <div class="col-md-6">
-        <h3><span class="label label-primary">Últimos pedidos</span></h3>
+        <h3><span class="label label-primary">Pedidos pendientes</span></h3>
         <table class="table table-striped">
             <thead>
           <tr>
-            <th><b>Producto</b></th>
-            <th><b>Cantidad</b></th>
-            <th><b>Estado</b></th>
-            <th><b>Fecha</b></th>
+            <th><b>Cliente</b></th>
+            <th><b>Precio</b></th>
+            <th><b>Estado del Pago</b></th>
+            <th><b>Stock</b></th>
+            <th><b>Fecha de entrega (limite)</b></th>
         </tr>
         </thead>
         <tbody>
             <tr>
                 <td>Prueba</td>
                 <td>Prueba</td>
-                <td><span class="label label-info">Pendiente</span></td>
+                <td><span class="label label-info">Pago pendiente</span></td>
+                <td>OK</td>
                 <td>Prueba</td>
             </tr>
             <tr>
                 <td>Prueba</td>
                 <td>Prueba</td>
-                <td><span class="label label-info">Pendiente</span></td>
+                <td><span class="label label-info">Pago pendiente</span></td>
+                <td>Falta 1 producto</td>
                 <td>Prueba</td>
             </tr>
             <tr>
                 <td>Prueba</td>
                 <td>Prueba</td>
-                <td><span class="label label-success">Entregado</span></td>
+                <td><span class="label label-success">Pagado</span></td>
+                <td>OK</td>
                 <td>Prueba</td>
             </tr>
             <tr>
                 <td>Prueba</td>
                 <td>Prueba</td>
-                <td><span class="label label-info">Pendiente</span></td>
+                <td><span class="label label-info">Pago pendiente</span></td>
+                <td>OK</td>
                 <td>Prueba</td>
             </tr>
         </tbody>
