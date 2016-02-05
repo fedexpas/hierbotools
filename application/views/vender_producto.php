@@ -20,9 +20,11 @@
             <p><b>Tipo de producto</b></p>
             <p><?php echo $tipo; ?></p>
             <input type="hidden" name="tipo" value="<?php echo $tipo; ?>">
+            <input type="hidden" name="tipo_id" value="<?php echo $producto[0]->tipo_id; ?>">
             <p><b>Marca</b></p>
             <p><?php echo $marca; ?></p>
             <input type="hidden" name="marca" value="<?php echo $marca; ?>">
+            <input type="hidden" name="marca_id" value="<?php echo $producto[0]->marca_id; ?>">
         </div>
         
         <!---------------Inicio session nombre de usuario-------------------------->

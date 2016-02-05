@@ -224,6 +224,7 @@ class Producto extends CI_Controller {
                                         'marca'=>$_POST['marca'],
                                         'producto_id'=>$_POST['producto_id']);
             
+            
             $datos_temp = $data['datos_venta']; // Copia los datos a una nueva variable para modificarlos ligeramente
             
             if (isset($cliente_id)) { // Si la variable $cliente_id fue asignada (porque el usuario ingreso un nombre de cliente)
@@ -233,10 +234,10 @@ class Producto extends CI_Controller {
             /****************************/
             //Corregimos nombres de variables para que esten de acuerdo con las de la db
             
-            $datos_temp['marca_id'] = $datos_temp['marca']; // Copia variable a la que tiene el nombre que queremos (en este caso marca_id por que asi esta en la db)
+            $datos_temp['marca_id'] = $_POST['marca_id']; // Copia variable a la que tiene el nombre que queremos (en este caso marca_id por que asi esta en la db)
             unset($datos_temp['marca']); // Borra vieja variable con nombre no deseado (IMPORTANTE: si esto no se hace se produce un ERROR porque intenta insertar un campo en la db con el nombre de la variabla y este no existe)
             
-            $datos_temp['tipo_id'] = $datos_temp['tipo'];
+            $datos_temp['tipo_id'] = $_POST['tipo_id'];
             unset($datos_temp['tipo']);
             
             /****************************/
