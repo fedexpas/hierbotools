@@ -210,13 +210,17 @@ class Producto extends CI_Controller {
                     $cliente_id = $this->cliente_model->agregar($datos_cliente); // agrega al cliente a la db (su nombre o apodo y su correo)
                     $this->session->set_userdata(array('cliente_id'=>$cliente_id));
                 }
+                else { // Si existe en la db un cliente con el correo suministrado, obtenemos su ID
+                    $datos_cliente = $this->cliente_model->existe(array('email'=>$this->session->userdata('cliente_email')));
+                    $this->session->set_userdata(array('cliente_id'=>$datos_cliente->cliente_id)); // Esto es por si el usuario esta usando un cliente (con correo) que ya existe en la DB
+                }
             }
             
             /*********************************************************************/
             
             // $_POST['descuento'] = 0 // En la vista vender_ok se verifica si el descuento es igual a 0 (cero), asignarlo aqui es una precaución por si el usario dejó el campo vacío            
             if ($this->session->userdata('cliente_id') !== NULL) {
-                $datos_ventas = $this->compra_model->getTempByClienteId($this->session->userdata('cliente_id')); // cliente_compra_temp
+                //$datos_ventas = $this->compra_model->getTempByClienteId($this->session->userdata('cliente_id')); // cliente_compra_temp
             }
             
             $data['datos_venta'] = array('nombre'=>$_POST['nombre'],
@@ -231,6 +235,7 @@ class Producto extends CI_Controller {
             $datos_temp = $data['datos_venta']; // Copia los datos a una nueva variable para modificarlos ligeramente
             
             if ($this->session->userdata('cliente_id') !== NULL) { // Si la variable $cliente_id fue asignada (porque el usuario ingreso un nombre de cliente)
+                
                 $datos_temp['cliente_id'] = $this->session->userdata('cliente_id'); // se copia a la tabla cliente_compra_Temp
             }
             

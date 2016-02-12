@@ -14,7 +14,7 @@ class Cliente_model extends CI_Model {
         if ($datos) {
             $query = $this->db->get_where('cliente', $datos);
             if ($query->num_rows() > 0)
-                return TRUE;
+                return $query->row();
         }
         return FALSE;
     }
