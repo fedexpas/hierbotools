@@ -10,5 +10,13 @@ class Compra_model extends CI_Model {
             return FALSE;
     }
     
+    function getTempByClienteID($cliente_id=FALSE) {
+        if ($cliente_id) {
+            $query = $this->db->get_where('cliente_compra_temp', array('cliente_id'=>$cliente_id));
+            return $query->result();
+        }
+        return FALSE;
+    }
+    
     
 }

@@ -1,5 +1,5 @@
-<h2>Vender producto</h2>
-<?php echo anchor('producto', 'Lista de Productos', array('style'=>'', 'class'=>'', 'title'=>'Regresar a la lista de productos')).' / Vender producto'; ?>
+<h2><span class="glyphicon glyphicon-shopping-cart"></span> Agregar al carrito</h2>
+<?php echo anchor('producto', 'Lista de Productos', array('style'=>'', 'class'=>'', 'title'=>'Regresar a la lista de productos')).' / Agregar al carrito'; ?>
 <br /><br />
 <?php if ($producto) { 
     if ($producto[0]->cantidad >= 1) { ?>
@@ -33,7 +33,7 @@
         <?php if ($this->session->userdata('cliente')) { ?>
         
         <p id='usuario' ><b><?php echo $this->session->userdata('cliente'); ?></b></p>
-        <input type="hidden" name="cliente" value="<?php echo $this->session->userdata('cliente'); ?>">
+        <span class='esconder'><input type="hidden" name="cliente" value="<?php echo $this->session->userdata('cliente'); ?>"></span>
         
         <?php } else { ?>
         
@@ -41,13 +41,13 @@
         
         <?php } ?>
         
-        <label>E-Mail:</label>
+        <label class='esconder'>E-Mail:</label>
         <?php if ($this->session->userdata('cliente_email')) { ?>
         
-        <p><b><?php echo $this->session->userdata('cliente_email'); ?></b></p>
-        <input type="hidden" name="cliente_email" value="<?php echo $this->session->userdata('cliente_email'); ?>">
+        <p class='esconder'><b><?php echo $this->session->userdata('cliente_email'); ?></b></p>
+        <span class='esconder'><input type="hidden" name="cliente_email" value="<?php echo $this->session->userdata('cliente_email'); ?>"></span>
         
-        <p id='usuario_del' style='color: red;'>Cambiar</p>
+        <p id='usuario_del' class='esconder' style='color: red;'>Cambiar</p>
         
         <?php } else { ?>
         

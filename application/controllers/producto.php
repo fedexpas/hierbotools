@@ -215,6 +215,9 @@ class Producto extends CI_Controller {
             /*********************************************************************/
             
             // $_POST['descuento'] = 0 // En la vista vender_ok se verifica si el descuento es igual a 0 (cero), asignarlo aqui es una precaución por si el usario dejó el campo vacío            
+            if ($this->session->userdata('cliente_id') !== NULL) {
+                $datos_ventas = $this->compra_model->getTempByClienteId($this->session->userdata('cliente_id')); // cliente_compra_temp
+            }
             
             $data['datos_venta'] = array('nombre'=>$_POST['nombre'],
                                         'precio'=>$_POST['precio'],
@@ -227,8 +230,8 @@ class Producto extends CI_Controller {
             
             $datos_temp = $data['datos_venta']; // Copia los datos a una nueva variable para modificarlos ligeramente
             
-            if (isset($cliente_id)) { // Si la variable $cliente_id fue asignada (porque el usuario ingreso un nombre de cliente)
-                $datos_temp['cliente_id'] = $cliente_id; // se copia a la tabla cliente_compra_Temp
+            if ($this->session->userdata('cliente_id') !== NULL) { // Si la variable $cliente_id fue asignada (porque el usuario ingreso un nombre de cliente)
+                $datos_temp['cliente_id'] = $this->session->userdata('cliente_id'); // se copia a la tabla cliente_compra_Temp
             }
             
             /****************************/
@@ -244,17 +247,19 @@ class Producto extends CI_Controller {
             
             //@TODO: Guardar en DB temporal de carrito de compras (compra_model)
             
-            /************* AGREGA COMPRAS A LA DB TEMPORAL ************/
+            /************* AGREGA COMPRAS A LA DB TEMPORAL ************/ // Y los IDs de la compra (tambien se puede buscar las compras atravez del cliente_id pero puede generar problemas si alguna compra de ese cliente quedo atorada en cliente_compra_temp)
             
             if ($this->session->userdata('compra_temp_ids') !== NULL) { // Si la variable de sesion compra_temp_ids existe procedemos a agregar un nuevo ID
                 $compra_temp_id = $this->compra_model->agregarCarrito($datos_temp);
+                $data['datos_venta']['compra_id'] = $compra_temp_id;
                 $viejos_ids = $this->session->userdata('compra_temp_ids');
-                $viejos_ids .= $compra_temp_id;  // REVISAR: Esto agrega la variable al array?
-                $this->session->set_userdata(array('compra_Temp_ids'=>$viejos_ids));
+                $viejos_ids .= '/'.$compra_temp_id; // Agrega ID de la venta a la variable (los IDs estan divididos por '/' )
+                $this->session->set_userdata(array('compra_temp_ids'=>$viejos_ids));
             }
             else { // De lo contrario creamos la variable y le asignamos su primer valor
                 $compra_temp_id = $this->compra_model->agregarCarrito($datos_temp);
-                $this->session->set_userdata(array('compra_Temp_ids'=>$compra_temp_id));
+                $this->session->set_userdata(array('compra_temp_ids'=>$compra_temp_id));
+                $data['datos_venta']['compra_id'] = $compra_temp_id;
             }
                 
             /***********************************************************/

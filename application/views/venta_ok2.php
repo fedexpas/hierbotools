@@ -23,6 +23,20 @@
       <td><span class='equis' value='<?php echo $datos_venta['compra_id']; ?>'>X</span></td>
   </tr>
   <?php $datos_venta['cantidad']--; } // *2 ?>
+  
+  <?php foreach($datos_venta as $venta) { ?>
+  
+  <tr class='tabla_<?php echo $venta['compra_id'];?>'>
+      <td><?php echo $venta['nombre']; ?></td>
+      <td><?php echo $venta['marca']; ?></td>
+      <td><?php echo $venta['tipo']; ?></td>
+      <td>$ <?php echo $venta['precio']; ?></td>
+      <?php if ($venta['descuento'] != 0) echo "<td></td>"; ?>
+      <td><span class='equis' value='<?php echo $venta['compra_id']; ?>'>X</span></td>
+  </tr>
+  
+  <?php } ?>
+  
   <?php if ($datos_venta['descuento'] != 0) { ?>
   <?php $descuento = ($datos_venta['precio']*$cantidad)*($datos_venta['descuento']/100); // Calcula el descuento: Saca el porcentaje y luego se lo resta al precio
         $precio_descuento = ($datos_venta['precio']*$cantidad)-$descuento; // Importante multiplicar el precio por la cantidad antes de restar el descuento ?>

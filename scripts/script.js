@@ -10,11 +10,23 @@
   })
   .trigger( "change" );*/
   
+  /************** BORRAR ITEM DEL CARRITO ****************/
+  
+  $('.equis').click(function(){
+     var compra_id = $(this).val();
+     alert(compra_id);
+     $('.tabla_'.compra_id).hide();
+  });
+  
+  /*******************************************************/
+  
+  
  /***************** Cambiar sesion usuario ****************/
   
   $('#usuario_del').click(function(){
-      var html = '<input type="text" name="usuario" value=""><br /><label>E-Mail:</label><input type="text" name="usuario_email" value="">';
+      var html = '<input type="text" name="cliente" value=""><br /><label>E-Mail:</label><br /><input type="text" name="cliente_email" value="">';
       $('#usuario').html(html);
+      $('.esconder').html('');
   });
   
   /********************************************************/
