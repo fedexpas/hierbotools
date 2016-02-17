@@ -219,9 +219,7 @@ class Producto extends CI_Controller {
             /*********************************************************************/
             
             // $_POST['descuento'] = 0 // En la vista vender_ok se verifica si el descuento es igual a 0 (cero), asignarlo aqui es una precaución por si el usario dejó el campo vacío            
-            if ($this->session->userdata('cliente_id') !== NULL) {
-                //$datos_ventas = $this->compra_model->getTempByClienteId($this->session->userdata('cliente_id')); // cliente_compra_temp
-            }
+            
             
             $data['datos_venta'] = array('nombre'=>$_POST['nombre'],
                                         'precio'=>$_POST['precio'],
@@ -250,8 +248,6 @@ class Producto extends CI_Controller {
             
             /****************************/
             
-            //@TODO: Guardar en DB temporal de carrito de compras (compra_model)
-            
             /************* AGREGA COMPRAS A LA DB TEMPORAL ************/ // Y los IDs de la compra (tambien se puede buscar las compras atravez del cliente_id pero puede generar problemas si alguna compra de ese cliente quedo atorada en cliente_compra_temp)
             
             if ($this->session->userdata('compra_temp_ids') !== NULL) { // Si la variable de sesion compra_temp_ids existe procedemos a agregar un nuevo ID
@@ -269,9 +265,13 @@ class Producto extends CI_Controller {
                 
             /***********************************************************/
             
+            if ($this->session->userdata('cliente_id') !== NULL) {
+                $data['ventas'] = $this->compra_model->getTempByClienteId($this->session->userdata('cliente_id')); // cliente_compra_temp
+            }
+            
             // echo "<pre>";print_r($data['datos_venta']);exit; ('cantidad' aparecia diferente a la original porque se modifica en vista_ok RESUELTO guardando la cantidad original antes de modificar la variable 07/11/15
             
-            $data['vista'] = 'venta_ok';
+            $data['vista'] = 'venta_ok2';
             
             $this->load->view('plantilla', $data);
         }
