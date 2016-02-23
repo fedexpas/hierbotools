@@ -252,10 +252,8 @@ class Producto extends CI_Controller {
             
             if ($this->session->userdata('compra_temp_ids') !== NULL) { // Si la variable de sesion compra_temp_ids existe procedemos a agregar un nuevo ID
                 $compra_temp_id = $this->compra_model->agregarCarrito($datos_temp);
+                $this->session->set_userdata(array('compra_temp_ids'=>$this->session->userdata('compra_temp_ids').'/'.$compra_temp_id)); // Funciona?
                 $data['datos_venta']['compra_id'] = $compra_temp_id;
-                $viejos_ids = $this->session->userdata('compra_temp_ids');
-                $viejos_ids .= '/'.$compra_temp_id; // Agrega ID de la venta a la variable (los IDs estan divididos por '/' )
-                $this->session->set_userdata(array('compra_temp_ids'=>$viejos_ids));
             }
             else { // De lo contrario creamos la variable y le asignamos su primer valor
                 $compra_temp_id = $this->compra_model->agregarCarrito($datos_temp);
@@ -265,8 +263,13 @@ class Producto extends CI_Controller {
                 
             /***********************************************************/
             
-            if ($this->session->userdata('cliente_id') !== NULL) {
-                $data['ventas'] = $this->compra_model->getTempByClienteId($this->session->userdata('cliente_id')); // cliente_compra_temp
+            if ($this->session->userdata('cliente_id') !== NULL) { // @TODO: Buscar las compras usando los datos de $this->session->userdata('compra_temp_ids')
+                $compra_ids = explode('/', $this->session->userdata('compra_temp_ids'));
+                foreach ($compra_ids as $compra_id) {
+                    $data['ventas'][$compra_id] = $this->compra_model->getTempByCompraId($compra_id); // cliente_compra_temp
+                }
+                //$data['ventas'] = $this->compra_model->getTempByClienteId($this->session->userdata('cliente_id'));
+                //echo "<pre>";print_r($data['ventas']);exit;
             }
             
             // echo "<pre>";print_r($data['datos_venta']);exit; ('cantidad' aparecia diferente a la original porque se modifica en vista_ok RESUELTO guardando la cantidad original antes de modificar la variable 07/11/15

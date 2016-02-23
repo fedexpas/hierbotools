@@ -17,22 +17,22 @@
     $precio_total = 0;
     $precio_descuento2 = 0;
   
-    foreach($ventas as $venta) { 
-        $precio_total += $venta->precio*$venta->cantidad; ?>
-    <?php while ($venta->cantidad > 0) { ?>
-            <tr class='tabla_<?php echo $venta->compra_id;?>'>
-                <td><?php echo $venta->nombre; ?></td>
-                <td><?php echo $venta->marca; ?></td>
-                <td><?php echo $venta->tipo; ?></td>
-                <td>$ <?php echo $venta->precio; ?></td>
-                <?php if ($venta->descuento != 0) { 
-                    $descuento2 = ($venta->precio*$venta->cantidad)*($venta->descuento/100);
-                    $precio_descuento2 += ($venta->precio*$venta->cantidad)-$descuento2;
+    foreach($ventas as $venta) {
+        $precio_total += $venta[0]->precio*$venta[0]->cantidad; ?>
+    <?php while ($venta[0]->cantidad > 0) { ?>
+            <tr class='tabla_<?php echo $venta[0]->compra_id;?>'>
+                <td><?php echo $venta[0]->nombre; ?></td>
+                <td><?php echo $venta[0]->marca; ?></td>
+                <td><?php echo $venta[0]->tipo; ?></td>
+                <td>$ <?php echo $venta[0]->precio; ?></td>
+                <?php if ($venta[0]->descuento != 0) { 
+                    $descuento2 = ($venta[0]->precio*$venta[0]->cantidad)*($venta[0]->descuento/100);
+                    $precio_descuento2 += ($venta[0]->precio*$venta[0]->cantidad)-$descuento2;
                     echo "<td></td>"; 
                 } ?>
-                <td><span class='equis' value='<?php echo $venta->compra_id; ?>'>X</span></td>
+                <td><span class='equis' value='<?php echo $venta[0]->compra_id; ?>'>X</span></td>
             </tr>
-            <?php $venta->cantidad-- ?>
+            <?php $venta[0]->cantidad-- ?>
     <?php } ?>
   <?php } ?>
   
