@@ -27,6 +27,16 @@ class Producto_model extends CI_Model {
         return FALSE;
     }
     
+    function borrar_carrito($compra_id=FALSE, $producto_id=FALSE) { // cliente_compra_temp
+        if ($compra_id && $producto_id) {
+            $where = array('compra_id'=>$compra_id,
+                            'producto_id'=>$producto_id);
+            $this->db->where($where);
+            return $this->db->delete('cliente_compra_temp');
+        }
+        return FALSE;
+    }
+    
     function obtener($id=FALSE) // IDIOTA
     {
         if($id!==FALSE) {

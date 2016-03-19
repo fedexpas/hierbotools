@@ -252,12 +252,12 @@ class Producto extends CI_Controller {
             
             if ($this->session->userdata('compra_temp_ids') !== NULL) { // Si la variable de sesion compra_temp_ids existe procedemos a agregar un nuevo ID
                 $compra_temp_id = $this->compra_model->agregarCarrito($datos_temp);
-                $this->session->set_userdata(array('compra_temp_ids'=>$this->session->userdata('compra_temp_ids').'/'.$compra_temp_id)); // Funciona?
+                $this->session->set_userdata(array('compra_temp_ids'=>$this->session->userdata('compra_temp_ids').'/'.$compra_temp_id.'-'.$datos_temp['producto_id'])); // Funciona?
                 $data['datos_venta']['compra_id'] = $compra_temp_id;
             }
             else { // De lo contrario creamos la variable y le asignamos su primer valor
                 $compra_temp_id = $this->compra_model->agregarCarrito($datos_temp);
-                $this->session->set_userdata(array('compra_temp_ids'=>$compra_temp_id));
+                $this->session->set_userdata(array('compra_temp_ids'=>$compra_temp_id.'-'.$datos_temp['producto_id']));
                 $data['datos_venta']['compra_id'] = $compra_temp_id;
             }
                 
@@ -265,6 +265,7 @@ class Producto extends CI_Controller {
             
             if ($this->session->userdata('cliente_id') !== NULL) { // @TODO: Buscar las compras usando los datos de $this->session->userdata('compra_temp_ids')
                 $compra_ids = explode('/', $this->session->userdata('compra_temp_ids'));
+                // echo "<pre>";print_r($compra_ids);exit; Para ver en un arreglo todas las combinaciones compra_id-producto_id de este cliente
                 foreach ($compra_ids as $compra_id) {
                     $data['ventas'][$compra_id] = $this->compra_model->getTempByCompraId($compra_id); // cliente_compra_temp
                 }
@@ -277,6 +278,38 @@ class Producto extends CI_Controller {
             $data['vista'] = 'venta_ok2';
             
             $this->load->view('plantilla', $data);
+        }
+        
+        public function del_producto_carrito()
+        {
+            global $data;
+            echo 'hola manola';
+            if ($this->uri->segment(3) && $this->uri->segment(4)) {
+                $compra_id = $this->uri->segment(3);
+                $producto_id = $this->uri->segment(4);
+                echo "Compra ID = ".$compra_id." / Producto ID = ".$producto_id;
+                
+                if(!$this->producto_model->borrar_carrito($compra_id, $producto_id)) {
+                    echo "No se pudo borrar el item guardado temporalmente en el carrito para el usuario ".$this->session->userdata('cliente');
+                    exit;
+                }
+                else {
+                    // Inecesariamente complejo sistema para desglosar la lista de compras temporales ($this->session->userdata('compra_temp_ids)
+                    $compra_ids = explode('/', $this->session->userdata('compra_temp_ids'));
+                    $i = 0;
+                    $ids = array();
+                    $ids_del = $compra_id.'-'.$producto_id;
+                    $bandera = TRUE; // Cambia a FALSE una vez 
+                    foreach ($compra_ids as $compra_id) {
+                        if ($compra_id !== $ids_del) { // Si la combinacion compra_id-producto_id es distinta a la que acabamos de borrar entonces al agregamos 
+                            $ids[$i] = $compra_id;
+                            $i++;
+                        }
+                    }
+                    $compra_temp_ids = implode('/', $ids);
+                    $this->session->set_userdata(array('compra_temp_ids'=>$compra_temp_ids));
+                }
+            }
         }
         
         public function do_vender() // Checkout del carrito. Cobrar todo lo que esta en carrito (viene desde venta_ok)

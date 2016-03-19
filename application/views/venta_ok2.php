@@ -20,17 +20,17 @@
     foreach($ventas as $venta) {
         $precio_total += $venta[0]->precio*$venta[0]->cantidad; ?>
     <?php while ($venta[0]->cantidad > 0) { ?>
-            <tr class='tabla_<?php echo $venta[0]->compra_id;?>'>
+            <tr class='tabla_<?php echo $venta[0]->compra_id;?>_<?php echo $venta[0]->producto_id; ?>'>
                 <td><?php echo $venta[0]->nombre; ?></td>
                 <td><?php echo $venta[0]->marca; ?></td>
                 <td><?php echo $venta[0]->tipo; ?></td>
-                <td>$ <?php echo $venta[0]->precio; ?></td>
+                <td class='precio_<?php echo $venta[0]->compra_id; ?>_<?php echo $venta[0]->producto_id; ?>' data-value='<?php echo $venta[0]->precio; ?>'>$ <?php echo $venta[0]->precio; ?></td>
                 <?php if ($venta[0]->descuento != 0) { 
                     $descuento2 = ($venta[0]->precio*$venta[0]->cantidad)*($venta[0]->descuento/100);
                     $precio_descuento2 += ($venta[0]->precio*$venta[0]->cantidad)-$descuento2;
                     echo "<td></td>"; 
                 } ?>
-                <td><span class='equis' value='<?php echo $venta[0]->compra_id; ?>'>X</span></td>
+                <td class='equis' data-value='<?php echo $venta[0]->compra_id; ?>_<?php echo $venta[0]->producto_id; ?>'>X</td>
             </tr>
             <?php $venta[0]->cantidad-- ?>
     <?php } ?>
@@ -52,7 +52,7 @@
       <td><b>Total</b></td>
       <td></td>
       <td></td> <!-- Aca abajo checa si es con descuento o no -->
-      <td><b>$ <?php echo $precio_descuento2==0?$precio_total:$precio_descuento2; ?></b></td>
+      <td id='precio_total' data-value='<?php echo $precio_descuento2==0?$precio_total:$precio_descuento2; ?>'><b>$ <?php echo $precio_descuento2==0?$precio_total:$precio_descuento2; ?></b></td>
       <?php if ($precio_descuento2 != 0) echo "<td></td>"; ?>
       <td></td>
   </tr>

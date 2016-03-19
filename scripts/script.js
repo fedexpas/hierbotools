@@ -13,10 +13,23 @@
   /************** BORRAR ITEM DEL CARRITO ****************/
   
   $('.equis').click(function(){
-     var compra_id = $(this).val();
-     alert(compra_id);
-     $('.tabla_'.compra_id).hide();
+      alert('hola');
+     var ids = $(this).data('value').split('_');
+     var compra_id = ids[0];
+     var producto_id = ids[1];
+     alert('compra id = '+compra_id+' producto id = '+producto_id);
+     var precio_producto = $('.precio_'+compra_id+'_'+producto_id).data('value');
+     var precio_total = $('#precio_total').data('value');
+     alert(precio_total-precio_producto);
+     $('.tabla_'+compra_id+'_'+producto_id).hide();
+     $('#precio_total').html('<b>$ '+(precio_total-precio_producto)+'</b>');
+     $('#precio_total').data('value', precio_total-precio_producto);
+     // @TODO: Borrar producto de la base de datos (cliente_compra_temp)
+     $.get('del_producto_carrito/'+compra_id+'/'+producto_id, function(data){
+         alert(data);
+     });
   });
+  
   
   /*******************************************************/
   
